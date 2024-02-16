@@ -27,7 +27,7 @@ app.use(express.json());                            // If this is not included, 
 app.use(cors());                                    // If this is not included, then the frontend will not be able to recieve responses from the api
                                                     // because the browsers will not allow it.
 
-app.get('/', (req, res) => { res.send('success') });  // Someone can use this endpoint to check whether they can access the api
+app.get('/', (req, res) => { res.send(database.users) });  // Someone can use this endpoint to check whether they can access the api
 
 // signin uses post instead of get because post allows us to attach the email and password in the request body instead of 
 // using query parameters (or path parameters), which is a security risk because then the email and password will be visible.
