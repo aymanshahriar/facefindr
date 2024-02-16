@@ -9,42 +9,6 @@ import Rank from './components/Rank/Rank.js';
 import Signin from './components/Signin/Signin.js';
 import Register from './components/Register/Register.js';
 
-const PAT = 'e81c2b69730140d7bf12185a627d9a6c';
-const USER_ID = 'clarifai';
-const APP_ID = 'main';
-const MODEL_ID = 'face-detection';
-//const IMAGE_URL = imageUrl; //'https://samples.clarifai.com/metro-north.jpg';
-
-const getRequestOptions = (imageUrl) => {
-  const raw = JSON.stringify({
-    "user_app_id": {
-      "user_id": USER_ID,
-      "app_id": APP_ID
-    },
-    "inputs": [
-      {
-        "data": {
-          "image": {
-            "url": imageUrl
-          }
-        }
-      }
-    ]
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-
-  return requestOptions;
-}
-
-
 function App() {
 
   const [input, setInput] = useState('');
@@ -54,7 +18,6 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({id: '', name: '', email: '', entries: 0, joined: ''});     // This state was added when connecting the frontend to the backend
           
-
   const calculateFaceBoundary = (responseBody) => {
     console.log(responseBody);
     const boundingBox = responseBody.outputs[0].data.regions[0].region_info.bounding_box;
@@ -75,23 +38,27 @@ function App() {
   }
 
   const onPictureSubmit = () => {
-    setImageUrl(input);    // for some reason, even after setting the imageUrl, the imageUrl will be unchanged if used in the subsequent lines.
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", getRequestOptions(input))   // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
-      .then(response => response.json())      // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
+    setImageUrl(input);                             // for some reason, even after setting the imageUrl, the imageUrl will be unchanged if used in the subsequent lines.
+    fetch("http://localhost:3000/image-url", {   // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body:  JSON.stringify({ imageUrl: input })
+    })
+      .then(response => response.json())            // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
       .then(responseBody => {
         if (responseBody) {
-          fetch('http://localhost:3000/image', {                         // This was added when connecting the frontend to the backend
+          fetch('http://localhost:3000/image-count', {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
             method: 'put',
-            headers: {'Content-Type': 'application/json'},               // Content-Type is in quotes because it has a '-'
+            headers: {'Content-Type': 'application/json'},                // Content-Type is in quotes because it has a '-'
             body: JSON.stringify({id: user.id})
           })
-            .then(response => response.json())
+            .then(response => response.json())                            // The Response object does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
             .then(count => {
-              setUser(prevUser => ({...prevUser, entries: count}))       // This technique is from: https://www.codecademy.com/courses/react-101/lessons/the-state-hook/exercises/objects-in-state (you can also use Object.assign as shown by andrei in the video called 'User Profile Update')
+              setUser(prevUser => ({...prevUser, entries: count}))        // This technique is from: https://www.codecademy.com/courses/react-101/lessons/the-state-hook/exercises/objects-in-state (you can also use Object.assign as shown by andrei in the video called 'User Profile Update')
             })
             .catch(error => console.log('error', error));                      
+          setFaceBoundary(calculateFaceBoundary(responseBody));
         }
-        setFaceBoundary(calculateFaceBoundary(responseBody));
       })
       .catch(error => console.log('error', error));
   }
@@ -140,7 +107,6 @@ function App() {
         )
 
       }
-
 
     </div>
   );
