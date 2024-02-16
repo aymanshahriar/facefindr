@@ -45,8 +45,9 @@ app.put('/image-count', (req, res) => { handleImageCountIncrementRequest(req, re
 // This endpoint makes an api call to clarifai api to see whether the given image has any faces. So this endpoint makes our server/api send a GET request to another api (the clarifai api)
 app.post('/image-url', (req, res) => { handleClarifaiApiCall(req, res) });
 
-app.listen(3000, () => {
-    console.log('app is running on port 3000');
+// If the PORT environment variable is not set in the computer, then use port 3000 by default
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`app is running on port ${process.env.PORT}`);
 });
 
 
