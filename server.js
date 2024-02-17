@@ -6,17 +6,18 @@ const { handleProfileGetRequest } = require('./controllers/profile');
 const { handleImageCountIncrementRequest, handleClarifaiApiCall } = require('./controllers/image');
 
 const db = knex({
-    client: 'pg',   // we installed pg with npm install pg
-    connection: {
-      host : process.env.DATABASE_URL,        // this was set to '127.0.0.1' or 'localhost' (same thing) before the postgres database was deployed on heroku
-      ssl: true                                 // this was added after the postgres database was deployed on heroku
+  client: 'pg',   // we installed pg with npm install pg
+  connection: {
+    connectionString: process.env.DATABASE_URL,           // this was added after the postgres database was deployed on heroku
+    ssl: true                                             // this was added after the postgres database was deployed on heroku
 
-      /* After deploying the postgres database on heroku, these are not required: 
-      port : 5432,
-      user : 'postgres',
-      password : 'password',
-      database : 'image_recognition_db'*/
-    }
+    /* After deploying the postgres database on heroku, these are not required: 
+    host: 'localhost'                   // Same as '127.0.0.1'
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'image_recognition_db'*/
+  }
 });
 
 // db.select('*').from('users').then(data => {     // postgres.select.from returns a promise
