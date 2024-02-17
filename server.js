@@ -8,7 +8,7 @@ const { handleImageCountIncrementRequest, handleClarifaiApiCall } = require('./c
 const db = knex({
     client: 'pg',   // we installed pg with npm install pg
     connection: {
-      host : '127.0.0.1',  // same as 'localhost'
+      host : 'postgresql-regular-92756',  // this was set to '127.0.0.1' or 'localhost' (same thing) before the postgres database was deployed on heroku
       port : 5432,
       user : 'postgres',
       password : 'password',
