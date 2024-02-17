@@ -1,4 +1,4 @@
-const PAT = 'e81c2b69730140d7bf12185a627d9a6c';
+//const PAT = 'e81c2b69730140d7bf12185a627d9a6c'; This is no longer needed when deploying the server/api on heroku, because we specify the clarifai api key as an environment variable
 const USER_ID = 'clarifai';
 const APP_ID = 'main';
 const MODEL_ID = 'face-detection';
@@ -11,7 +11,7 @@ const getRequestOptions = (imageUrl) => {
   });
   const requestOptions = {
     method: 'POST',
-    headers: { 'Accept': 'application/json', 'Authorization': 'Key ' + PAT },
+    headers: { 'Accept': 'application/json', 'Authorization': 'Key ' + process.env.CLARIFAI_API_KEY },
     body: requestBody
   };
 
