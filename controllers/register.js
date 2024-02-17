@@ -25,7 +25,7 @@ const {name, email, password} = req.body;
     .then(trx.commit)
     .catch(trx.rollback);
   })
-  .catch(err => res.status(400).json(`unable to register: ${err})`));                  // If any error occurs when trying to insert to the two tables, then neither table will be inserted into.
+  .catch(err => res.status(400).json(`unable to register: ${err}`));                  // If any error occurs when trying to insert to the two tables, then neither table will be inserted into.
                                                                // Don't respond with a specific message like "charlie@gmail.com already exists", that is a violation of the 
                                                                //   security principle where we don't give the client any information about our system.
                                               
