@@ -39,7 +39,7 @@ function App() {
 
   const onPictureSubmit = () => {
     setImageUrl(input);                             // for some reason, even after setting the imageUrl, the imageUrl will be unchanged if used in the subsequent lines.
-    fetch("http://localhost:3000/image-url", {   // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+    fetch("https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com/image-url", {   // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body:  JSON.stringify({ imageUrl: input })
@@ -47,7 +47,7 @@ function App() {
       .then(response => response.json())            // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
       .then(responseBody => {
         if (responseBody) {
-          fetch('http://localhost:3000/image-count', {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+          fetch('https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com:/image-count', {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
             method: 'put',
             headers: {'Content-Type': 'application/json'},                // Content-Type is in quotes because it has a '-'
             body: JSON.stringify({id: user.id})

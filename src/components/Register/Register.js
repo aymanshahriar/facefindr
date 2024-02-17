@@ -19,7 +19,7 @@ function Register({ changeRoute, loadUser }) {
   };
 
   const onRegister = () => {
-    fetch('http://localhost:3000/register', {
+    fetch('https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},   // Content-Type is in quotes because it has a '-'
       body: JSON.stringify({name: name, email: email, password: password})

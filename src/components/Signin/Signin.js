@@ -14,7 +14,7 @@ function Signin({ changeRoute, loadUser }) {
   };
 
   const onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
+    fetch('https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com/signin', {
       method: 'post', 
       headers: {'Content-Type': 'application/json'},               // Content-Type is in quotes because it has a '-'
       body: JSON.stringify({email: signInEmail, password: signInPassword})
