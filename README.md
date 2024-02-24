@@ -1,3 +1,7 @@
+# Reminders to myself:
+- The IDE that I used was VS Code
+- To start a server that serves the frontend, run `npm start`.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
