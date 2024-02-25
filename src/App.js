@@ -103,7 +103,7 @@ function App() {
 
   return (
     <div className="App">
-      <ParticlesBg bg={true} type='cobweb' num='100' color="#FFFFFF" />   {/*num set from 230 to 100 to prevent distraction during development*/}
+      <ParticlesBg bg={true} type='cobweb' num='230' color="#FFFFFF" />   {/*num set from 230 to 100 to prevent distraction during development*/}
       <Navigation changeRoute={changeRoute} isSignedIn={isSignedIn}/>
       {route === 'home' ?
         <div>
