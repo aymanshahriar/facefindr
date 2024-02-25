@@ -13,11 +13,11 @@ const db = knex({
     ssl: true                                             // this was added after the postgres database was deployed on heroku
 
     /* After deploying the postgres database on heroku, these are not required: 
-    host: 'localhost'                   // Same as '127.0.0.1'
+    host: 'localhost',                   // Same as '127.0.0.1'
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'image_recognition_db'*/
+    database: 'image_recognition_db' */
   }
 });
 
@@ -52,7 +52,7 @@ app.post('/image-url', (req, res) => { handleClarifaiApiCall(req, res) });
 
 // If the PORT environment variable is not set in the computer, then use port 3000 by default
 app.listen(process.env.PORT || 3000, () => {
-    console.log(`app is running on port ${process.env.PORT}`);
+    console.log(`app is running on port ${process.env.PORT || 3000}`);
 });
 
 

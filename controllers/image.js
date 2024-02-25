@@ -21,9 +21,13 @@ const getRequestOptions = (imageUrl) => {
 // Previously the frontend sent a request to the clarifai api. But now this is being done here, in the backend (specifically, in the api/server). This is because the request to the clarifai api has a request header that contains the api key. So if this request is being made in the frontend, any user using the frontend can see this api key using the dev tools of the browser (more specifically, the network section).
 const handleClarifaiApiCall = (req, res) => {
   const imageUrl = req.body.imageUrl;
+  let status;
   fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", getRequestOptions(imageUrl))      // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
-    .then(clarifaiApiResponse => clarifaiApiResponse.json())                                               // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
-    .then(clarifaiApiResponseBody => res.json(clarifaiApiResponseBody))
+    .then(clarifaiApiResponse => {
+      status = clarifaiApiResponse.status
+      return clarifaiApiResponse.json()
+    })                                               // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
+    .then(clarifaiApiResponseBody => res.status(status).json(clarifaiApiResponseBody))
     .catch(err => res.status(400).json('Error while trying to send a request to clarifai api: ', err));
 }
 
