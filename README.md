@@ -2,6 +2,11 @@
 - The IDE that I used was VS Code
 - To start a server that serves the frontend, run `npm start`.
 
+# Some heroku commands:
+- To deploy on heroku: git push heorku main (or any other branch name)
+- To view the URL that the fontend server is running on in heroku: heroku open
+- To view logs on heroku: heroku logs --tail
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

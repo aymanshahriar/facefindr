@@ -13,24 +13,26 @@ function App() {
 
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [faceBoundary, setFaceBoundary] = useState({});
+  const [faceBoundaries, setFaceBoundaries] = useState([]);
   const [route, setRoute] = useState('signin');   // route state keeps track of which page the user is on
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({id: '', name: '', email: '', entries: 0, joined: ''});     // This state was added when connecting the frontend to the backend
           
-  const calculateFaceBoundary = (responseBody) => {
-    console.log(responseBody);
-    const boundingBox = responseBody.outputs[0].data.regions[0].region_info.bounding_box;
+  const calculateFaceBoundaries = (responseBody) => {
+    const boundingBoxes = responseBody.outputs[0].data.regions.map(region => region.region_info.bounding_box)
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
 
-    return {
-      leftBoundary: boundingBox.left_col * width,
-      topBoundary: boundingBox.top_row * height,
-      rightBoundary: width * (1 - boundingBox.right_col),
-      bottomBoundary: height * (1 - boundingBox.bottom_row)
-    }
+    const faceBoundaries = boundingBoxes.map(boundingBox => {
+      return { 
+        leftBoundary: boundingBox.left_col * width,
+        topBoundary: boundingBox.top_row * height,
+        rightBoundary: width * (1 - boundingBox.right_col),
+        bottomBoundary: height * (1 - boundingBox.bottom_row)
+      }
+    })
+    return faceBoundaries
   }
 
   const onInputChange = (event) => {
@@ -38,27 +40,38 @@ function App() {
   }
 
   const onPictureSubmit = () => {
-    setImageUrl(input);                             // for some reason, even after setting the imageUrl, the imageUrl will be unchanged if used in the subsequent lines.
-    fetch("https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com/image-url", {   // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+    let faceRecognitionResponseOk;
+    let faceRecognitionResponseStatus
+    if (input === null || input.trim().length === 0) {
+      return
+    }
+    setImageUrl(input);                                                    // for some reason, even after setting the imageUrl, the imageUrl will be unchanged if used in the subsequent lines.
+    fetch('https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com/image-url', {                            // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body:  JSON.stringify({ imageUrl: input })
     })
-      .then(response => response.json())            // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
+      .then(response => {
+        faceRecognitionResponseOk = response.ok
+        faceRecognitionResponseStatus = response.status
+        return response.json()                                            // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
+      })            
       .then(responseBody => {
-        if (responseBody) {
-          fetch('https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com:/image-count', {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},                // Content-Type is in quotes because it has a '-'
-            body: JSON.stringify({id: user.id})
-          })
-            .then(response => response.json())                            // The Response object does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
-            .then(count => {
-              setUser(prevUser => ({...prevUser, entries: count}))        // This technique is from: https://www.codecademy.com/courses/react-101/lessons/the-state-hook/exercises/objects-in-state (you can also use Object.assign as shown by andrei in the video called 'User Profile Update')
-            })
-            .catch(error => console.log('error', error));                      
-          setFaceBoundary(calculateFaceBoundary(responseBody));
+        if (!faceRecognitionResponseOk) {
+          return Promise.reject({status: faceRecognitionResponseStatus, body: responseBody})
         }
+        fetch('https://image-face-recognition-app-api-8336e7c202ba.herokuapp.com:/image-count', {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},                // Content-Type is in quotes because it has a '-'
+          body: JSON.stringify({id: user.id})
+        })
+          .then(response => response.json())                            // The Response object does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
+          .then(count => {
+            setUser(prevUser => ({...prevUser, entries: count}))        // This technique is from: https://www.codecademy.com/courses/react-101/lessons/the-state-hook/exercises/objects-in-state (you can also use Object.assign as shown by andrei in the video called 'User Profile Update')
+          })
+          .catch(error => console.log('error', error));                      
+        setFaceBoundaries(calculateFaceBoundaries(responseBody));
+        
       })
       .catch(error => console.log('error', error));
   }
@@ -68,7 +81,7 @@ function App() {
       setIsSignedIn(false);
       setInput('');                                // This and the bottom three lines were added when connecting the frontend to the backend
       setImageUrl('');                                      
-      setFaceBoundary({});
+      setFaceBoundaries([]);
       setUser({id: '', name: '', email: '', entries: 0, joined: ''});
 
     } else if (newRoute === 'home'){
@@ -97,7 +110,7 @@ function App() {
           <Logo />
           <Rank name={user.name} entries={user.entries}/>
           <ImageLinkForm onInputChange={onInputChange} onPictureSubmit={onPictureSubmit} />
-          <FaceRecognition imageUrl={imageUrl} faceBoundary={faceBoundary} />
+          <FaceRecognition imageUrl={imageUrl} faceBoundaries={faceBoundaries} />
         </div>
         :
         (route === 'signin' ?
