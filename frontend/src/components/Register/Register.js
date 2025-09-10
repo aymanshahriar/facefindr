@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { API_URL, API_PORT } from '../../config.js';
 
 function Register({ changeRoute, loadUser }) {
 
@@ -19,7 +20,7 @@ function Register({ changeRoute, loadUser }) {
   };
 
   const onRegister = () => {
-    fetch('http://localhost:3000/register', {
+    fetch(`${API_URL}:${API_PORT}/register`, {
       method: 'post',
       headers: {'Content-Type': 'application/json'},   // Content-Type is in quotes because it has a '-'
       body: JSON.stringify({name: name, email: email, password: password})

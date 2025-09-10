@@ -8,6 +8,7 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition.js';
 import Rank from './components/Rank/Rank.js';
 import Signin from './components/Signin/Signin.js';
 import Register from './components/Register/Register.js';
+import { API_URL, API_PORT } from './config.js';
 
 function App() {
 
@@ -46,7 +47,7 @@ function App() {
       return
     }
     setImageUrl(input);                                                    // for some reason, even after setting the imageUrl, the imageUrl will be unchanged if used in the subsequent lines.
-    fetch('http://localhost:3000/image-url', {                            // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+    fetch(`${API_URL}:${API_PORT}/image-url`, {                            // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body:  JSON.stringify({ imageUrl: input })
@@ -60,7 +61,7 @@ function App() {
         if (!faceRecognitionResponseOk) {
           return Promise.reject({status: faceRecognitionResponseStatus, body: responseBody})
         }
-        fetch('http://localhost:3000/image-count', {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+        fetch(`${API_URL}:${API_PORT}/image-count`, {                    // This was added when connecting the frontend to the backend. // Note: fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
           method: 'put',
           headers: {'Content-Type': 'application/json'},                // Content-Type is in quotes because it has a '-'
           body: JSON.stringify({id: user.id})

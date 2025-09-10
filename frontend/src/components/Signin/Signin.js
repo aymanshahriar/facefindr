@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { API_URL, API_PORT } from '../../config.js';
 
 function Signin({ changeRoute, loadUser }) {
 
@@ -14,7 +15,7 @@ function Signin({ changeRoute, loadUser }) {
   };
 
   const onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
+    fetch(`${API_URL}:${API_PORT}/signin`, {
       method: 'post', 
       headers: {'Content-Type': 'application/json'},               // Content-Type is in quotes because it has a '-'
       body: JSON.stringify({email: signInEmail, password: signInPassword})
