@@ -1,5 +1,6 @@
 # Reminders to myself: 
 - The IDE that I used was VS Code
+- When you initially clone the repo, run `npm install` in the terminal to install all the required libraries.
 - To start the server/api locally, run `node server.js` or `nodemon server.js`
 
 # Some heroku commands:

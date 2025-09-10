@@ -1,23 +1,25 @@
+const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = require('./config');
+
 const cors = require('cors')
 const knex = require('knex');             // guide to using knex: https://knexjs.org/guide/#browser
 const { handleRegisterRequest } = require('./controllers/register');
 const { handleSigninRequest } = require('./controllers/signin');
 const { handleProfileGetRequest } = require('./controllers/profile');
 const { handleImageCountIncrementRequest, handleClarifaiApiCall } = require('./controllers/image');
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;             // Prevents the "Error: self signed certificate" when the backend/api and postgres database are deployed on heroku. For more info: https://www.udemy.com/course/the-complete-web-developer-zero-to-mastery/learn/lecture/19018214#content
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;             // Prevents the "Error: self signed certificate" when the backend/api and postgres database are deployed on heroku. For more info: https://www.udemy.com/course/the-complete-web-developer-zero-to-mastery/learn/lecture/19018214#content
 
 const db = knex({
   client: 'pg',   // we installed pg with npm install pg
   connection: {
-    connectionString: process.env.DATABASE_URL,           // this was added after the postgres database was deployed on heroku
-    ssl: true                                             // this was added after the postgres database was deployed on heroku
+    // connectionString: process.env.DATABASE_URL,           // this was added after the postgres database was deployed on heroku
+    // ssl: true                                             // this was added after the postgres database was deployed on heroku
 
-    /* After deploying the postgres database on heroku, these are not required: 
-    host: 'localhost',                   // Same as '127.0.0.1'
-    port: 5432,
-    user: 'postgres',
-    password: 'password',
-    database: 'image_recognition_db' */
+    // After deploying the postgres database on heroku, these are not required: 
+    host: DB_HOST,
+    port: DB_PORT,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME
   }
 });
 

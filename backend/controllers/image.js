@@ -1,17 +1,15 @@
-//const PAT = 'e81c2b69730140d7bf12185a627d9a6c'; This is no longer needed when deploying the server/api on heroku, because we specify the clarifai api key as an environment variable
-const USER_ID = 'clarifai';
-const APP_ID = 'main';
-const MODEL_ID = 'face-detection';
+const { CLARIFAI_API_KEY, CLARIFAI_USER_ID, CLARIFAI_APP_ID, CLARIFAI_MODEL_ID } = require('../config');
+
 //const IMAGE_URL = imageUrl; //'https://samples.clarifai.com/metro-north.jpg';
 
 const getRequestOptions = (imageUrl) => {
   const requestBody = JSON.stringify({
-    "user_app_id": { "user_id": USER_ID, "app_id": APP_ID },
+    "user_app_id": { "user_id": CLARIFAI_USER_ID, "app_id": CLARIFAI_APP_ID },
     "inputs": [{ "data": { "image": { "url": imageUrl } } }]
   });
   const requestOptions = {
     method: 'POST',
-    headers: { 'Accept': 'application/json', 'Authorization': 'Key ' + process.env.CLARIFAI_API_KEY },
+    headers: { 'Accept': 'application/json', 'Authorization': 'Key ' + CLARIFAI_API_KEY },
     body: requestBody
   };
 
@@ -22,7 +20,7 @@ const getRequestOptions = (imageUrl) => {
 const handleClarifaiApiCall = (req, res) => {
   const imageUrl = req.body.imageUrl;
   let status;
-  fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", getRequestOptions(imageUrl))      // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
+  fetch("https://api.clarifai.com/v2/models/" + CLARIFAI_MODEL_ID + "/outputs", getRequestOptions(imageUrl))      // fetch does not directly return the JSON response body, instead it returns a promise whose fulfill value is a Response object
     .then(clarifaiApiResponse => {
       status = clarifaiApiResponse.status
       return clarifaiApiResponse.json()
