@@ -13,5 +13,7 @@ module.exports = {
     CLARIFAI_API_KEY: process.env.CLARIFAI_API_KEY,
     CLARIFAI_USER_ID: process.env.CLARIFAI_USER_ID,
     CLARIFAI_APP_ID: process.env.CLARIFAI_APP_ID,
-    CLARIFAI_MODEL_ID: process.env.CLARIFAI_MODEL_ID
+    CLARIFAI_MODEL_ID: process.env.CLARIFAI_MODEL_ID,
+
+    PORT: process.env.PORT
 };
