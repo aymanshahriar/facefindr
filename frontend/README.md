@@ -1,3 +1,7 @@
+# How to run the frontend after pulling repo:
+1) Create an empty .env file inside frontend/src directory. Fill in the environment variables using .env.example as a guide.
+2) Run the command (npm run start:dev) to start the server.
+
 # Reminders to myself:
 - The IDE that I used was VS Code
 - To start a server that serves the frontend, run `npm start`.

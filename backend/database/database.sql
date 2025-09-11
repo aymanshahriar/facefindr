@@ -1,4 +1,4 @@
-CREATE DATABASE image_recognition_db;
+CREATE DATABASE facefindr_db;
 
 CREATE TABLE users (
 	id serial PRIMARY KEY,
