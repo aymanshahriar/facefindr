@@ -1,5 +1,6 @@
 # How to run the backend after pulling repo:
 1) Create the postgres database using the sql file in backend/database. Make sure you know the host, port, user, password and name of that database (which will be used as environment variables).
+I used this video to set up a postgres database using a GCP compute instance: https://www.youtube.com/watch?v=JLdy_cJ1KRA
 2) Create an empty .env file inside the backend directory. Fill in the environment variables using .env.example as a guide. 
 3) Download and install node modules using the command (npm init)
 4) Run the command (nodemon server.js) or (npm run start:dev) to start the server.
