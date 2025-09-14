@@ -8,13 +8,10 @@ const { handleRegisterRequest } = require('./controllers/register');
 const { handleSigninRequest } = require('./controllers/signin');
 const { handleProfileGetRequest } = require('./controllers/profile');
 const { handleImageCountIncrementRequest, handleClarifaiApiCall } = require('./controllers/image');
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;             // Prevents the "Error: self signed certificate" when the backend/api and postgres database are deployed on heroku. For more info: https://www.udemy.com/course/the-complete-web-developer-zero-to-mastery/learn/lecture/19018214#content
 
 const db = knex({
   client: 'pg',   // we installed pg with npm install pg
   connection: {
-    // connectionString: process.env.DATABASE_URL,           // this was added after the postgres database was deployed on heroku
-    // ssl: true                                             // this was added after the postgres database was deployed on heroku
     host: DB_HOST,
     port: DB_PORT,
     user: DB_USER,
