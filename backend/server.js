@@ -3,7 +3,6 @@ const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, PORT } = require('./con
 const express = require('express');
 const cors = require('cors')
 const knex = require('knex');             // guide to using knex: https://knexjs.org/guide/#browser
-const path = require('path');
 
 const { handleRegisterRequest } = require('./controllers/register');
 const { handleSigninRequest } = require('./controllers/signin');
@@ -35,16 +34,6 @@ app.post('/register', (req, res) => { handleRegisterRequest(req, res, db) });
 app.get('/profile/:id', (req, res) => { handleProfileGetRequest(req, res, db) });
 app.put('/image-count', (req, res) => { handleImageCountIncrementRequest(req, res, db) });
 app.post('/image-url', (req, res) => { handleClarifaiApiCall(req, res) });
-
-// Serve React frontend static files
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-// Catch-all handler to serve index.html for React Router
-// Currently not using React Router yet in the frontend, but might 
-// modify the code to use it in the future.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
 
 app.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
