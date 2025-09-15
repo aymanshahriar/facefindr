@@ -29,7 +29,7 @@ const handleSigninRequest = (req, res, db) => {
         
         }
     })
-    .catch(err => res.status(400).json('Failed to log in (5)'));                            // There is an error when querying the database to fetch the user credentials (email and hash) from the login table
+    .catch(err => res.status(400).json('Failed to log in (5): ' + err.message));                            // There is an error when querying the database to fetch the user credentials (email and hash) from the login table
 
 };
 
