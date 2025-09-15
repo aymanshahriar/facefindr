@@ -9,14 +9,16 @@ const { handleSigninRequest } = require('./controllers/signin');
 const { handleProfileGetRequest } = require('./controllers/profile');
 const { handleImageCountIncrementRequest, handleClarifaiApiCall } = require('./controllers/image');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;             // Prevents the "self-signed certificate in certificate chain" error when the database is deployed on vercel/supabase. 
+
 const db = knex({
   client: 'pg',   // we installed pg with npm install pg
   connection: {
     connectionString: DB_CONNECTION_STRING,
-    ssl:
-      process.env.NODE_ENV === 'production'
-        ? { rejectUnauthorized: false } // Vercel / serverless
-        : false,                        // local dev
+    // ssl:
+    //   process.env.NODE_ENV === 'production'
+    //     ? { rejectUnauthorized: false } // Vercel / serverless
+    //     : false,                        // local dev
   }
 }); 
 
