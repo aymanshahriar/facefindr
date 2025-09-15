@@ -23,6 +23,10 @@ const db = knex({
 const app = express();
 
 app.use(express.json());                            // If this is not included, then we will not be able to read json sent in request body
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 app.use(cors());                                    // If this is not included, then the frontend will not be able to recieve responses from the api
                                                     // because the browsers will not allow it.
 app.get('/', (req, res) => { res.send("API is working") });  // Someone can use this endpoint to check whether they can access the api
