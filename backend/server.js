@@ -13,7 +13,10 @@ const db = knex({
   client: 'pg',   // we installed pg with npm install pg
   connection: {
     connectionString: DB_CONNECTION_STRING,
-    ssl: { rejectUnauthorized: false } 
+    ssl:
+      process.env.NODE_ENV === 'production'
+        ? { rejectUnauthorized: false } // Vercel / serverless
+        : false,                        // local dev
   }
 }); 
 
