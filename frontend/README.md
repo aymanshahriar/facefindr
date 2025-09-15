@@ -3,6 +3,7 @@
 2) Run the command (npm run start:dev) to start the server.
 
 # Reminders to myself:
+- In create-react-app, we don't have to use the dotenv library. Instead, all environment variables must start with REACT_APP_ to be accessible in the code.
 - The IDE that I used was VS Code
 - To start a server that serves the frontend, run `npm start`.
 
