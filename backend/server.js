@@ -1,4 +1,4 @@
-const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, PORT } = require('./config');
+const { DB_CONNECTION_STRING, PORT } = require('./config');
 
 const express = require('express');
 const cors = require('cors')
@@ -12,11 +12,7 @@ const { handleImageCountIncrementRequest, handleClarifaiApiCall } = require('./c
 const db = knex({
   client: 'pg',   // we installed pg with npm install pg
   connection: {
-    host: DB_HOST,
-    port: DB_PORT,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
+    connectionString: DB_CONNECTION_STRING,
     ssl: { rejectUnauthorized: false } 
   }
 }); 

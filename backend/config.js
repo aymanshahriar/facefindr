@@ -3,11 +3,7 @@ dotenv.config();
 
 module.exports = {
     // Database env variables
-    DB_HOST: process.env.POSTGRES_HOST,
-    DB_PORT: process.env.POSTGRES_PORT || 5432,
-    DB_USER: process.env.POSTGRES_USER,
-    DB_PASSWORD: process.env.POSTGRES_PASSWORD,
-    DB_NAME: process.env.POSTGRES_DATABASE,
+    DB_CONNECTION_STRING: process.env.POSTGRES_CONNECTION_STRING,
 
     // Clarify API env variables
     CLARIFAI_API_KEY: process.env.CLARIFAI_API_KEY,
