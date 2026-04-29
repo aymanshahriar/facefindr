@@ -1,4 +1,5 @@
-CREATE DATABASE facefindr_db;
+-- Run this schema against an existing database (for local dev, usually `facefindr`).
+-- The setup script creates the database and role before importing this file.
 
 CREATE TABLE users (
 	id serial PRIMARY KEY,
