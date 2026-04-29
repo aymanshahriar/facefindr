@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import { API_URL } from '../../config.js';
+import { useNavigate } from 'react-router-dom';
 
-function Register({ changeRoute, loadUser }) {
-
+function Register({ setIsSignedIn, loadUser }) {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +30,8 @@ function Register({ changeRoute, loadUser }) {
       .then(user => {                         // For this endpoint, in the response body the server sends back details of the newly created user 
         if (user.id) {                        // It's possible that the server has sent back an error message in the response body instead of a user object. To check for this, check whether the response object has an id attribute, which will indicate that the response is a user object and not an error message
           loadUser(user);
-          changeRoute('home');
+          setIsSignedIn(true);
+          navigate('/');
         }
       });       
   
@@ -78,7 +80,7 @@ function Register({ changeRoute, loadUser }) {
             />
           </div>
           <div className="lh-copy mt3">
-            <p className="f6 link dim black db grow pointer" onClick={() => changeRoute('signin')}>Back to Sign In</p>
+            <p className="f6 link dim black db grow pointer" onClick={() => navigate('/signin')}>Back to Sign In</p>
           </div>
         </div>
       </main>

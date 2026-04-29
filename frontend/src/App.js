@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import './App.css';
 import ParticlesBg from 'particles-bg'
 import Navigation from './components/Navigation/Navigation.js';
@@ -12,10 +13,10 @@ import { API_URL } from './config.js';
 
 function App() {
 
+  const navigate = useNavigate();
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [faceBoundaries, setFaceBoundaries] = useState([]);
-  const [route, setRoute] = useState('signin');   // route state keeps track of which page the user is on
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({id: '', name: '', email: '', entries: 0, joined: ''});     // This state was added when connecting the frontend to the backend
           
@@ -77,19 +78,14 @@ function App() {
       .catch(error => console.log('error', error));
   }
 
-  const changeRoute = (newRoute) => {
-    if (newRoute === 'signout') {
-      setIsSignedIn(false);
-      setInput('');                                // This and the bottom three lines were added when connecting the frontend to the backend
-      setImageUrl('');                                      
-      setFaceBoundaries([]);
-      setUser({id: '', name: '', email: '', entries: 0, joined: ''});
 
-    } else if (newRoute === 'home'){
-      setIsSignedIn(true);
-    }
-
-    setRoute(newRoute);
+  const signOut = () => {
+    setIsSignedIn(false);
+    setInput('');
+    setImageUrl('');                                      
+    setFaceBoundaries([]);
+    setUser({id: '', name: '', email: '', entries: 0, joined: ''});
+    navigate('/signin');
   }
 
   const loadUser = (newUser) => {
@@ -105,22 +101,29 @@ function App() {
   return (
     <div className="App">
       <ParticlesBg bg={true} type='cobweb' num='230' color="#FFFFFF" />   {/*num set from 230 to 100 to prevent distraction during development*/}
-      <Navigation changeRoute={changeRoute} isSignedIn={isSignedIn}/>
-      {route === 'home' ?
-        <div>
-          <Logo />
-          <Rank name={user.name} entries={user.entries}/>
-          <ImageLinkForm onInputChange={onInputChange} onPictureSubmit={onPictureSubmit} />
-          <FaceRecognition imageUrl={imageUrl} faceBoundaries={faceBoundaries} />
-        </div>
-        :
-        (route === 'signin' ?
-          <Signin changeRoute={changeRoute} loadUser={loadUser}/>
-          :
-          <Register changeRoute={changeRoute} loadUser={loadUser}/>
-        )
+      <Navigation isSignedIn={isSignedIn} signOut={signOut}/>
+      <Routes>
+        <Route path='/' element={
+          isSignedIn ? (
+            <div>
+              <Logo />
+              <Rank name={user.name} entries={user.entries}/>
+              <ImageLinkForm onInputChange={onInputChange} onPictureSubmit={onPictureSubmit} />
+              <FaceRecognition imageUrl={imageUrl} faceBoundaries={faceBoundaries} />
+            </div>
+          ) : (
+            <Navigate to='/signin' replace />
+          )
+        } />
+        
+        <Route path='/signin' element={
+          <Signin setIsSignedIn={setIsSignedIn} loadUser={loadUser}/>
+        } />
 
-      }
+        <Route path='/register' element={
+          <Register setIsSignedIn={setIsSignedIn} loadUser={loadUser}/>
+        } />
+      </Routes>
 
     </div>
   );

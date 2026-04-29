@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import { API_URL } from '../../config.js';
+import { useNavigate } from 'react-router-dom';
 
-function Signin({ changeRoute, loadUser }) {
-
+function Signin({ setIsSignedIn, loadUser }) {
+  const navigate = useNavigate();
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
 
@@ -24,7 +25,8 @@ function Signin({ changeRoute, loadUser }) {
       .then(user => {                       // For this endpoint, in the response body the server sends back details of the signed in user
         if (user.id) {
           loadUser(user);
-          changeRoute('home');
+          setIsSignedIn(true);
+          navigate('/');
         }
       })   
       .catch(error => console.log('error', error));
@@ -64,7 +66,7 @@ function Signin({ changeRoute, loadUser }) {
             />
           </div>
           <div className="lh-copy mt3">
-            <p className="f6 link dim black db grow pointer" onClick={() => changeRoute('register')}>Register</p>
+            <p className="f6 link dim black db grow pointer" onClick={() => navigate('/register')}>Register</p>
           </div>
         </div>
       </main>

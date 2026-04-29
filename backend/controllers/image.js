@@ -26,7 +26,7 @@ const handleClarifaiApiCall = (req, res) => {
       return clarifaiApiResponse.json()
     })                                               // The Response object, in turn, does not directly contain the actual JSON response body but is instead a representation of the entire HTTP response. To extract the JSON body content from the Response object, we use the json() method, which returns a second promise whose fulfill value is the json object
     .then(clarifaiApiResponseBody => res.status(status).json(clarifaiApiResponseBody))
-    .catch(err => res.status(400).json('Error while trying to send a request to clarifai api: ', err));
+    .catch(err => res.status(400).json({ error: 'Error while trying to send request to Clarifai', details: err.message }));
 }
 
 
