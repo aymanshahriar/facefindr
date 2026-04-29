@@ -1,5 +1,5 @@
 # How to run the backend after pulling repo:
-1) Create the postgres database using the setup script from the project root:
+1) Create the postgres database using the setup script inside backend/database:
    `bash ./backend/database/setup_postgres_dev.sh`
    Optional overrides:
    `DB_NAME=facefindr DB_USER=facefindr_user DB_PASSWORD=strong_password bash ./backend/database/setup_postgres_dev.sh`
